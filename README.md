@@ -179,6 +179,34 @@ Alle Produkt- und Markennamen gehören ihren jeweiligen Rechteinhabern. Kraken C
 
 Benutzerprofile und die udev-Regel werden absichtlich nicht automatisch entfernt.
 
+<!-- KRAKEN_SCREENSHOTS_START -->
+## Screenshots
+
+### Übersicht
+![Übersicht](docs/images/screenshots/01-dashboard-overview.png)
+
+### Kühlung
+![Kühlung](docs/images/screenshots/02-cooling-control.png)
+
+### RGB
+![RGB](docs/images/screenshots/03-rgb-control.png)
+
+### LCD
+![LCD](docs/images/screenshots/04-lcd-control.png)
+
+### Einstellungen
+![Einstellungen](docs/images/screenshots/05-settings-design-background.png)
+
+### Profile
+![Profile](docs/images/screenshots/06-profiles-management.png)
+
+### Über
+![Über](docs/images/screenshots/07-about-project.png)
+
+### Log
+![Log](docs/images/screenshots/08-log-view.png)
+<!-- KRAKEN_SCREENSHOTS_END -->
+
 ## Unterstützte Geräte
 
 | Gerät | USB-ID | Getesteter Funktionsumfang |
