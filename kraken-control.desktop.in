@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Kraken Control by Frelidon
+Comment=NZXT Kraken 2023 unter Linux steuern · Version 2.9.6
+Exec=@EXEC@
+Icon=@ICON@
+Terminal=false
+Categories=System;Settings;HardwareSettings;
+StartupNotify=true
+Keywords=NZXT;Kraken;AIO;Cooling;RGB;LCD;liquidctl;Frelidon;

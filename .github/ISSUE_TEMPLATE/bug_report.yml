@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a reproducible problem in Kraken Control
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Do not post passwords, tokens, unreviewed diagnostic files, serial numbers or unrelated private logs.
+  - type: input
+    id: version
+    attributes:
+      label: Kraken Control version
+      placeholder: "2.9.6"
+    validations:
+      required: true
+  - type: input
+    id: distro
+    attributes:
+      label: Linux distribution and kernel
+      placeholder: "Nobara/Fedora, kernel ..."
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Kraken / controller hardware
+      placeholder: "NZXT Kraken RGB 360 (2023), firmware ..., USB ID ..."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Give exact steps and expected/actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Relevant reviewed log excerpt
+      description: Paste only the relevant excerpt after checking it for personal data.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety/privacy checks
+      options:
+        - label: I reviewed the text for personal data, serial numbers, tokens and unrelated logs.
+          required: true
+        - label: I understand this is an independent community project, not official NZXT support.
+          required: true

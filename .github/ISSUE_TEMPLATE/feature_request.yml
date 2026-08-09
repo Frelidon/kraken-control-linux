@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest an improvement within the Kraken Control project scope
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Cooling
+        - LCD
+        - RGB
+        - Profiles
+        - UI / accessibility
+        - Packaging / installation
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This request is related to Kraken Control and not general motherboard, chassis or GPU fan control.
+          required: true

@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use Kraken Control in a project, please cite the software and its release version."
+title: "Kraken Control by Frelidon"
+type: software
+authors:
+  - name: Frelidon
+version: 2.9.6
+date-released: 2026-08-09
+license: GPL-3.0-or-later

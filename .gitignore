@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Build / release output
+build/
+dist/
+release/
+
+# Logs and local diagnostics
+*.log
+kraken-diagnostics-*.txt
+
+# Local editor / OS metadata
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db

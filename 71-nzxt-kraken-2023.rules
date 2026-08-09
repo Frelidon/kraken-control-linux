@@ -1,0 +1,10 @@
+# Kraken Control by Frelidon / liquidctl access rules
+# Must sort before 73-seat-late.rules so TAG+=uaccess is applied correctly.
+
+# NZXT Kraken 2023 (1e71:300e): USB, hidraw, pump/fan and LCD access
+ACTION=="add|change", SUBSYSTEM=="usb", ATTR{idVendor}=="1e71", ATTR{idProduct}=="300e", MODE="0660", TAG+="uaccess"
+ACTION=="add|change", SUBSYSTEM=="hidraw", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="300e", MODE="0660", TAG+="uaccess"
+
+# NZXT 2023 RGB Controller (1e71:2012)
+ACTION=="add|change", SUBSYSTEM=="usb", ATTR{idVendor}=="1e71", ATTR{idProduct}=="2012", MODE="0660", TAG+="uaccess"
+ACTION=="add|change", SUBSYSTEM=="hidraw", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1e71", ATTRS{idProduct}=="2012", MODE="0660", TAG+="uaccess"

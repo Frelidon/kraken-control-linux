@@ -1,0 +1,42 @@
+name: Hardware support request
+description: Provide data for another Kraken model or revision
+title: "[Hardware]: "
+labels: ["hardware", "needs-testing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Run `kraken-control-diagnostics`, then manually review the output before attaching it. Do not publish serial numbers or unrelated personal data.
+  - type: input
+    id: model
+    attributes:
+      label: Exact product model
+    validations:
+      required: true
+  - type: input
+    id: usb
+    attributes:
+      label: USB VID:PID
+      placeholder: "1e71:300e"
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmware version
+  - type: textarea
+    id: liquidctl
+    attributes:
+      label: liquidctl detection/status
+      render: text
+  - type: textarea
+    id: notes
+    attributes:
+      label: What works and what does not?
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I manually reviewed all diagnostics before sharing them.
+          required: true
