@@ -1,5 +1,7 @@
 # Kraken Control by Frelidon 2.9.6 – Linux
 
+![Kraken Control Übersicht](docs/images/screenshots/01-dashboard-overview.png)
+
 <!-- project-badges -->
 [![CI](https://github.com/Frelidon/kraken-control-linux/actions/workflows/ci.yml/badge.svg)](https://github.com/Frelidon/kraken-control-linux/actions/workflows/ci.yml) [![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-blue.svg)](https://github.com/Frelidon/kraken-control-linux/blob/main/LICENSE) [![Release](https://img.shields.io/github/v/release/Frelidon/kraken-control-linux?display_name=tag)](https://github.com/Frelidon/kraken-control-linux/releases)
 <!-- /project-badges -->
@@ -181,9 +183,6 @@ Benutzerprofile und die udev-Regel werden absichtlich nicht automatisch entfernt
 
 <!-- KRAKEN_SCREENSHOTS_START -->
 ## Screenshots
-
-### Übersicht
-![Übersicht](docs/images/screenshots/01-dashboard-overview.png)
 
 ### Kühlung
 ![Kühlung](docs/images/screenshots/02-cooling-control.png)
