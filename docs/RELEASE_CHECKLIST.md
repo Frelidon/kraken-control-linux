@@ -15,7 +15,7 @@
 - [ ] create annotated `vX.Y.Z` tag
 - [ ] push tag
 - [ ] release workflow succeeds
-- [ ] Linux ZIP, source TAR.GZ and `SHA256SUMS` are attached
+- [ ] RPM, DEB, universelles ZIP, Quell-TAR.GZ, Entwicklerpaket und `SHA256SUMS` sind angehängt
 - [ ] release notes are correct
 
 ## After release

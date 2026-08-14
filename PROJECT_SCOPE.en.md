@@ -1,30 +1,11 @@
-# Project scope - Kraken Control by Frelidon 2.9.6
+# Project scope – Open Hardware Control 3.0.9
 
-## Purpose
+Open Hardware Control is the shared Linux interface for supported hardware modules.
 
-Kraken Control is a focused Linux application for supported NZXT Kraken liquid coolers. Keeping a strict boundary reduces risk, simplifies testing and prevents conflicts with firmware, motherboard utilities or GPU drivers.
+It contains the complete NZXT Kraken module from 2.9.23 and the first safe Corsair/OpenLinkHub adapter. Future device families are intended to remain separate modules in the hierarchical navigation.
 
-## Included in Kraken Control
+The OpenLinkHub module reads service state, devices, profiles and telemetry. Allow-listed documented controls added in version 3.0.4 remain available for cooling, RGB/LCD, mice, keyboards and headsets. Version 3.0.9 lets reported mouse buttons open a direct assignment editor and adds a bounded, window-local keyboard macro recorder. Buttons without a safely reported index, complex macro editing, the full RGB editor and new LCD media remain in the local dashboard.
 
-- coolant temperature and device status of the supported Kraken
-- Kraken pump
-- radiator fans when reported or controlled through the Kraken itself
-- Kraken LCD and static LCD content
-- separate NZXT 2023 RGB Controller
-- diagnostics limited to supported Kraken hardware
+Version 3.0.9 also adds a global Celsius/Fahrenheit display setting and independent label/value styling for generated LCD designs. Cooling data remains stored in Celsius. The original NZXT liquid-temperature screen restore from 3.0.7, the five-second delayed LCD profile startup from 3.0.6 and CPU-temperature curves from 3.0.5 remain active.
 
-## Not included in Kraken Control
-
-- motherboard headers such as CPU_FAN, SYS_FAN or CHA_FAN
-- additional chassis fans not controlled through the Kraken
-- GPU fans and AMD graphics controls
-- general sensor, overclocking or system-tuning features
-- automatic changes to firmware or motherboard fan profiles
-
-## Modular future
-
-Other hardware areas should be developed as separate applications with their own safety boundaries. A future shared front end may launch those tools or combine status information without removing the clear responsibility of each individual program.
-
-## Version 2.8 clarification
-
-CPU temperature may be read only to safely assist the supported Kraken cooling device. General motherboard, GPU and system tuning remain out of scope.
+Open Radeon Control Center remains separate. Firmware updates, general motherboard tuning and untested direct USB writes are out of scope.

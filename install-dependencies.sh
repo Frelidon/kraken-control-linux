@@ -3,45 +3,117 @@
 set -euo pipefail
 
 MODE="${1:---check-and-install}"
-DNF_BIN="$(command -v dnf || true)"
 PKEXEC_BIN="$(command -v pkexec || true)"
 
-missing_packages=()
-missing_labels=()
+declare -a missing_keys=()
+declare -a missing_labels=()
+declare -a missing_packages=()
 
-add_missing() {
-    local package="$1"
-    local label="$2"
-    missing_packages+=("$package")
-    missing_labels+=("$label")
+if [[ -r /etc/os-release ]]; then
+    # shellcheck disable=SC1091
+    source /etc/os-release
+fi
+
+DISTRO_ID="${ID:-unknown}"
+PACKAGE_FAMILY="unknown"
+PACKAGE_MANAGER=""
+
+if command -v dnf >/dev/null 2>&1; then
+    PACKAGE_FAMILY="dnf"
+    PACKAGE_MANAGER="$(command -v dnf)"
+elif command -v apt-get >/dev/null 2>&1; then
+    PACKAGE_FAMILY="apt"
+    PACKAGE_MANAGER="$(command -v apt-get)"
+elif command -v pacman >/dev/null 2>&1; then
+    PACKAGE_FAMILY="pacman"
+    PACKAGE_MANAGER="$(command -v pacman)"
+elif command -v zypper >/dev/null 2>&1; then
+    PACKAGE_FAMILY="zypper"
+    PACKAGE_MANAGER="$(command -v zypper)"
+fi
+
+package_for() {
+    local key="$1"
+    case "$PACKAGE_FAMILY:$key" in
+        dnf:liquidctl) echo "liquidctl" ;;
+        dnf:pyside6) echo "python3-pyside6" ;;
+        dnf:qtsvg) echo "qt6-qtsvg" ;;
+        dnf:pillow) echo "python3-pillow" ;;
+        dnf:polkit) echo "polkit" ;;
+        apt:liquidctl) echo "liquidctl" ;;
+        apt:pyside6) echo "python3-pyside6.qtwidgets" ;;
+        apt:qtsvg) echo "python3-pyside6.qtsvg" ;;
+        apt:pillow) echo "python3-pil" ;;
+        apt:polkit) echo "policykit-1" ;;
+        pacman:liquidctl) echo "liquidctl" ;;
+        pacman:pyside6) echo "pyside6" ;;
+        pacman:qtsvg) echo "qt6-svg" ;;
+        pacman:pillow) echo "python-pillow" ;;
+        pacman:polkit) echo "polkit" ;;
+        zypper:liquidctl) echo "liquidctl" ;;
+        zypper:pyside6) echo "python3-pyside6" ;;
+        zypper:qtsvg) echo "libQt6Svg6" ;;
+        zypper:pillow) echo "python3-Pillow" ;;
+        zypper:polkit) echo "polkit" ;;
+        *) return 1 ;;
+    esac
 }
 
-command -v liquidctl >/dev/null 2>&1 || add_missing "liquidctl" "liquidctl"
-python3 -c 'import PySide6' >/dev/null 2>&1 || add_missing "python3-pyside6" "PySide6 / Qt for Python"
-python3 -c 'from PIL import Image' >/dev/null 2>&1 || add_missing "python3-pillow" "Pillow"
+add_missing() {
+    local key="$1"
+    local label="$2"
+    local package
+    package="$(package_for "$key" 2>/dev/null || true)"
+    missing_keys+=("$key")
+    missing_labels+=("$label")
+    [[ -n "$package" ]] && missing_packages+=("$package")
+}
 
-if (( ${#missing_packages[@]} == 0 )); then
+if [[ "$MODE" != "--check-gui-and-install" ]]; then
+    command -v liquidctl >/dev/null 2>&1 || add_missing "liquidctl" "liquidctl"
+fi
+python3 -c 'import PySide6' >/dev/null 2>&1 || add_missing "pyside6" "PySide6 / Qt for Python"
+python3 -c 'from PySide6.QtGui import QImageReader; assert any(bytes(x).lower() == b"svg" for x in QImageReader.supportedImageFormats())' >/dev/null 2>&1 || add_missing "qtsvg" "Qt-SVG-Unterstützung"
+if [[ "$MODE" != "--check-gui-and-install" ]]; then
+    python3 -c 'from PIL import Image' >/dev/null 2>&1 || add_missing "pillow" "Pillow"
+fi
+
+if (( ${#missing_keys[@]} == 0 )); then
     echo "Alle benötigten Abhängigkeiten sind installiert."
     exit 0
 fi
 
-package_list="${missing_packages[*]}"
+if [[ -z "$PKEXEC_BIN" ]] && ! command -v sudo >/dev/null 2>&1; then
+    missing_packages+=("$(package_for polkit 2>/dev/null || true)")
+fi
+
+mapfile -t missing_packages < <(printf '%s\n' "${missing_packages[@]}" | sed '/^$/d' | awk '!seen[$0]++')
 label_list="$(printf '%s\n' "${missing_labels[@]}" | sed 's/^/• /')"
-manual_command="sudo dnf install ${package_list}"
+package_list="${missing_packages[*]}"
+
+case "$PACKAGE_FAMILY" in
+    dnf) manual_command="sudo dnf install ${package_list}" ;;
+    apt) manual_command="sudo apt update && sudo apt install ${package_list}" ;;
+    pacman) manual_command="sudo pacman -S --needed ${package_list}" ;;
+    zypper) manual_command="sudo zypper install ${package_list}" ;;
+    *) manual_command="Siehe INSTALL.md für die manuelle Installation." ;;
+esac
 
 show_error() {
     local message="$1"
     if command -v kdialog >/dev/null 2>&1; then
-        kdialog --title "Kraken Control by Frelidon" --error "$message" || true
+        kdialog --title "Open Hardware Control by Frelidon" --error "$message" || true
     elif command -v zenity >/dev/null 2>&1; then
-        zenity --error --title="Kraken Control by Frelidon" --text="$message" || true
+        zenity --error --title="Open Hardware Control by Frelidon" --text="$message" || true
     else
-        printf '%s\n' "$message" >&2
+        printf '%b\n' "$message" >&2
     fi
 }
 
 ask_confirmation() {
-    local message="Kraken Control benötigt folgende Pakete:\n\n${label_list}\n\nSie werden ausschließlich aus den bereits eingerichteten DNF-Paketquellen installiert. Es werden keine fremden Paketquellen hinzugefügt.\n\nFortfahren?"
+    local purpose="für das NZXT-Modul"
+    [[ "$MODE" == "--check-gui-and-install" ]] && purpose="für die grafische Oberfläche"
+    local message="Open Hardware Control benötigt ${purpose} folgende Pakete:\n\n${label_list}\n\nDistribution: ${DISTRO_ID} (${PACKAGE_FAMILY})\nEs werden nur die bereits eingerichteten Paketquellen verwendet. Es werden keine fremden Paketquellen hinzugefügt.\n\nFortfahren?"
     if command -v kdialog >/dev/null 2>&1; then
         kdialog --title "Abhängigkeiten installieren" --yesno "$message"
         return $?
@@ -65,12 +137,12 @@ if [[ "$MODE" == "--check" ]]; then
     exit 10
 fi
 
-if [[ -z "$DNF_BIN" ]]; then
-    show_error "Die automatische Installation unterstützt derzeit Nobara/Fedora mit DNF.\n\nFehlende Pakete:\n${label_list}"
+if [[ "$PACKAGE_FAMILY" == "unknown" || -z "$PACKAGE_MANAGER" || ${#missing_packages[@]} -eq 0 ]]; then
+    show_error "Die Distribution wurde nicht eindeutig erkannt.\n\nFehlende Komponenten:\n${label_list}\n\nSiehe INSTALL.md für die manuelle Installation."
     exit 2
 fi
 
-if [[ "$MODE" == "--check-and-install" ]]; then
+if [[ "$MODE" == "--check-and-install" || "$MODE" == "--check-gui-and-install" ]]; then
     if ! ask_confirmation; then
         echo "Installation abgebrochen."
         exit 20
@@ -80,24 +152,38 @@ elif [[ "$MODE" != "--install" ]]; then
     exit 64
 fi
 
+declare -a install_command=()
+case "$PACKAGE_FAMILY" in
+    dnf) install_command=("$PACKAGE_MANAGER" install -y "${missing_packages[@]}") ;;
+    apt) install_command=("$PACKAGE_MANAGER" install -y "${missing_packages[@]}") ;;
+    pacman) install_command=("$PACKAGE_MANAGER" -S --needed --noconfirm "${missing_packages[@]}") ;;
+    zypper) install_command=("$PACKAGE_MANAGER" --non-interactive install "${missing_packages[@]}") ;;
+esac
+
 if [[ $EUID -eq 0 ]]; then
-    "$DNF_BIN" install -y "${missing_packages[@]}"
+    "${install_command[@]}"
 elif [[ -n "$PKEXEC_BIN" ]]; then
-    "$PKEXEC_BIN" "$DNF_BIN" install -y "${missing_packages[@]}"
+    "$PKEXEC_BIN" "${install_command[@]}"
 elif command -v sudo >/dev/null 2>&1 && [[ -t 0 ]]; then
-    sudo "$DNF_BIN" install "${missing_packages[@]}"
+    sudo "${install_command[@]}"
 else
-    show_error "Für die Administratorabfrage wurde pkexec nicht gefunden.\n\nInstalliere manuell:\n${manual_command}"
+    show_error "Für die Administratorabfrage wurde weder pkexec noch ein interaktives sudo gefunden.\n\nInstalliere manuell:\n${manual_command}"
     exit 3
 fi
 
 remaining=()
-command -v liquidctl >/dev/null 2>&1 || remaining+=("liquidctl")
-python3 -c 'import PySide6' >/dev/null 2>&1 || remaining+=("python3-pyside6")
-python3 -c 'from PIL import Image' >/dev/null 2>&1 || remaining+=("python3-pillow")
+if [[ "$MODE" != "--check-gui-and-install" ]]; then
+    command -v liquidctl >/dev/null 2>&1 || remaining+=("liquidctl")
+fi
+python3 -c 'import PySide6' >/dev/null 2>&1 || remaining+=("PySide6")
+python3 -c 'from PySide6.QtGui import QImageReader; assert any(bytes(x).lower() == b"svg" for x in QImageReader.supportedImageFormats())' >/dev/null 2>&1 || remaining+=("Qt SVG")
+if [[ "$MODE" != "--check-gui-and-install" ]]; then
+    python3 -c 'from PIL import Image' >/dev/null 2>&1 || remaining+=("Pillow")
+fi
 
 if (( ${#remaining[@]} > 0 )); then
     echo "Nach der Installation weiterhin nicht erkannt: ${remaining[*]}" >&2
+    echo "Prüfe die distributionsspezifischen Hinweise in INSTALL.md." >&2
     exit 4
 fi
 

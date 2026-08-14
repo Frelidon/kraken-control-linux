@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 set -u
 
-OUT="${1:-$PWD/kraken-diagnostics-$(date +%Y%m%d-%H%M%S).txt}"
+OUT="${1:-$PWD/open-hardware-control-diagnostics-$(date +%Y%m%d-%H%M%S).txt}"
+SOURCE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 TMP="$(mktemp)"
 trap 'rm -f "$TMP"' EXIT
 
 {
-  echo "Kraken Control by Frelidon diagnostics"
-  echo "Version: 2.9.6"
+  echo "Open Hardware Control by Frelidon diagnostics"
+  echo "Version: 3.0.9"
   echo "Generated: $(date --iso-8601=seconds 2>/dev/null || date)"
-  echo "Mode: read-only (no device initialization or write commands)"
+  echo "Mode: diagnostics are read-only (application controls require explicit session approval)"
   echo
   echo "== System =="
   if [ -r /etc/os-release ]; then
@@ -47,6 +48,9 @@ trap 'rm -f "$TMP"' EXIT
   echo
   echo "== udev rule =="
   cat /etc/udev/rules.d/71-nzxt-kraken-2023.rules 2>&1 || true
+  echo
+  echo "== OpenLinkHub local status (read-only, serial suffix only) =="
+  python3 "$SOURCE_DIR/openlinkhub_integration.py" --status 2>&1 || true
 } > "$TMP" 2>&1
 
 # Defense in depth: remove common personal and device identifiers even when a
