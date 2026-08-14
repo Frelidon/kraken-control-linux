@@ -186,8 +186,8 @@ def build_rpm(temp: Path) -> Path:
     for name in ("BUILD", "BUILDROOT", "RPMS", "SOURCES", "SPECS", "SRPMS"):
         (top / name).mkdir(parents=True)
 
-    payload = temp / f"open-hardware-control-{VERSION}"
-    payload.mkdir()
+    payload = temp / "rpm-payload" / f"open-hardware-control-{VERSION}"
+    payload.mkdir(parents=True)
     install_runtime_tree(payload)
     source = top / "SOURCES" / f"open-hardware-control-{VERSION}.tar.gz"
     with tarfile.open(source, "w:gz") as archive:
