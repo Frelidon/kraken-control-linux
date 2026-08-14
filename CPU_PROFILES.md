@@ -1,13 +1,14 @@
-# AMD-AM5-Prozessorprofile in Kraken Control 2.9.6
+# AMD-AM5-Prozessorprofile in Open Hardware Control 3.0.9
 
-Die Profile steuern ausschließlich die unterstützte NZXT-Kraken-Kühlung. CPU-Tjmax und Kraken-Wassertemperatur sind getrennte Größen.
+Die Profile steuern ausschließlich die unterstützte NZXT-Kraken-Kühlung. Pumpen- und Lüfterkurve verwenden jetzt direkt die CPU-Temperatur. CPU-Tjmax und Kraken-Wassertemperatur bleiben getrennte Größen.
 
 ## Regeln
 
-- Ryzen 9000, Ryzen 8000G und die aufgenommenen normalen Ryzen-7000-Modelle: AMD-Tjmax 95 °C, verstärkte Kraken-Kühlung ab 80 °C, 100 % ab 90 °C.
-- Ryzen 7000 X3D: AMD-Tjmax 89 °C, verstärkte Kraken-Kühlung ab 75 °C, 100 % ab 85 °C.
-- Kraken-Flüssigkeit: Warnung standardmäßig 42 °C, kritisch 50 °C; Wasserkurven erreichen spätestens bei 45 °C 100 %.
-- Die CPU-Assistenz verwendet 5 °C Hysterese und stellt anschließend die gewählten Wasserkurven wieder her.
+- Ryzen 9000, Ryzen 8000G und die aufgenommenen normalen Ryzen-7000-Modelle: AMD-Tjmax 95 °C, verstärkte Kühlung ab 80 °C, beide CPU-Kurven bei 90 °C auf 100 %.
+- Ryzen 7000 X3D: AMD-Tjmax 89 °C, verstärkte Kühlung ab 75 °C, beide CPU-Kurven bei 85 °C auf 100 %.
+- Zwischen den fünf CPU-Punkten wird linear interpoliert. Eine EMA glättet kurze Spitzen; steigende Werte reagieren schneller als fallende.
+- Kraken-Flüssigkeit: Warnung standardmäßig 42 °C, kritisch 50 °C, optional bei kritisch automatisch 100 %.
+- Beim echten Beenden der Anwendung werden konservative Flüssigkeitstemperaturkurven als autonomer Hardware-Fallback gespeichert.
 
 ## Enthaltene Einzelprofile
 

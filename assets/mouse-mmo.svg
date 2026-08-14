@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later · Original Open Hardware Control artwork -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" role="img" aria-label="Eigene schematische MMO-Gaming-Maus">
+  <defs><linearGradient id="body" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2b3f4e"/><stop offset="1" stop-color="#0e161d"/></linearGradient></defs>
+  <path d="M300 17c-76 0-112 34-124 112l-15 99c-12 76 48 117 139 117 92 0 146-42 137-118l-13-100C414 51 376 17 300 17Z" fill="url(#body)" stroke="#73899d" stroke-width="4"/>
+  <path d="M300 20v144M177 150h247" fill="none" stroke="#506476" stroke-width="3"/>
+  <rect x="285" y="58" width="30" height="70" rx="15" fill="#0b1319" stroke="#35b8ee" stroke-width="3"/>
+  <path d="M300 65v24" stroke="#35b8ee" stroke-width="4" stroke-linecap="round"/>
+  <rect x="281" y="147" width="38" height="34" rx="12" fill="#0e171e" stroke="#35b8ee" stroke-width="2"/>
+  <path d="M176 103c-46 14-65 55-61 110l6 101 48-28 13-139Z" fill="#182a36" stroke="#73899d" stroke-width="3"/>
+  <rect x="91" y="76" width="83" height="181" rx="19" fill="#101c24" stroke="#35b8ee" stroke-width="3"/>
+  <g fill="#263b49" stroke="#67d0fb" stroke-width="1.5">
+    <rect x="99" y="86" width="21" height="33" rx="5"/><rect x="124" y="86" width="21" height="33" rx="5"/><rect x="149" y="86" width="17" height="33" rx="5"/>
+    <rect x="99" y="128" width="21" height="33" rx="5"/><rect x="124" y="128" width="21" height="33" rx="5"/><rect x="149" y="128" width="17" height="33" rx="5"/>
+    <rect x="99" y="170" width="21" height="33" rx="5"/><rect x="124" y="170" width="21" height="33" rx="5"/><rect x="149" y="170" width="17" height="33" rx="5"/>
+    <rect x="99" y="212" width="21" height="33" rx="5"/><rect x="124" y="212" width="21" height="33" rx="5"/><rect x="149" y="212" width="17" height="33" rx="5"/>
+  </g>
+  <path d="M271 315h58" stroke="#35b8ee" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+</svg>

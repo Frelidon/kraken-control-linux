@@ -1,30 +1,11 @@
-# Projektumfang - Kraken Control by Frelidon 2.9.6
+# Projektumfang – Open Hardware Control 3.0.9
 
-## Zweck
+Open Hardware Control ist die gemeinsame Linux-Oberfläche für unterstützte Hardwaremodule.
 
-Kraken Control ist eine spezialisierte Linux-Anwendung für unterstützte NZXT-Kraken-Wasserkühlungen. Die klare Begrenzung reduziert Risiken, vereinfacht Tests und verhindert Konflikte mit BIOS, Mainboard-Tools oder GPU-Treibern.
+Enthalten sind das vollständige NZXT-Kraken-Modul aus 2.9.23 und die erste sichere Corsair-/OpenLinkHub-Anbindung. Neue Gerätefamilien sollen als getrennte Module in der hierarchischen Navigation ergänzt werden.
 
-## Gehört zu Kraken Control
+Das OpenLinkHub-Modul liest Dienststatus, Geräte, Profile und Telemetrie. Die seit Version 3.0.4 fest freigegebenen dokumentierten Schreibaktionen bleiben enthalten. Version 3.0.9 ergänzt direkte Maustastenbelegung und eine begrenzte fensterlokale Tastaturmakroaufnahme über die offizielle API. Der vollständige RGB-Editor und neue LCD-Medien bleiben im lokalen Web-Dashboard.
 
-- Wassertemperatur und Gerätestatus der unterstützten Kraken
-- Kraken-Pumpe
-- Radiatorlüfter, sofern sie über die Kraken selbst gemeldet oder gesteuert werden
-- Kraken-LCD und statische LCD-Inhalte
-- separater NZXT 2023 RGB Controller
-- Diagnose ausschließlich für die unterstützte Kraken-Hardware
+Version 3.0.9 ergänzt globale Celsius-/Fahrenheit-Anzeige sowie getrennte LCD-Farben und -Größen für Beschriftung und Temperaturzahl. Technische Kühlwerte bleiben intern in Celsius. Original-LCD-Rückstellung, verzögerter Profilstart und CPU-Kurven bleiben erhalten.
 
-## Gehört nicht zu Kraken Control
-
-- Mainboard-Anschlüsse wie CPU_FAN, SYS_FAN oder CHA_FAN
-- zusätzliche Gehäuselüfter, die nicht über die Kraken gesteuert werden
-- GPU-Lüfter und AMD-Grafiksteuerung
-- allgemeine Sensor-, Übertaktungs- oder System-Tuning-Funktionen
-- automatische Änderungen an BIOS- oder Mainboard-Lüfterprofilen
-
-## Modulare Zukunft
-
-Weitere Hardwarebereiche sollen als eigenständige Anwendungen mit eigenen Sicherheitsgrenzen entwickelt werden. Später kann eine gemeinsame Oberfläche diese Werkzeuge starten oder ihre Statusdaten zusammenführen, ohne dass die einzelnen Programme ihre klare Verantwortung verlieren.
-
-## Ergänzung in Version 2.8
-
-CPU-Temperaturen dürfen gelesen werden, soweit sie ausschließlich zur sicheren Regelung der unterstützten Kraken verwendet werden. Das macht Kraken Control nicht zu einem allgemeinen Mainboard-, GPU- oder System-Tuning-Werkzeug.
+Open Radeon Control Center bleibt eigenständig. Firmwareaktualisierungen, allgemeines Mainboard-Tuning und ungetestete direkte USB-Schreibzugriffe gehören nicht zum Umfang.

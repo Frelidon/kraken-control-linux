@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "v*"
+    branches:
+      - "publish/v*"
 
 permissions:
   contents: write
@@ -20,25 +22,54 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: "3.14"
+      - name: Resolve and validate release version
+        id: release
+        shell: bash
+        run: |
+          VERSION="$(tr -d '\r\n' < VERSION)"
+          TAG="v${VERSION}"
+          if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "$TAG" ]]; then
+            echo "Tag $GITHUB_REF_NAME does not match VERSION $VERSION" >&2
+            exit 1
+          fi
+          if [[ "$GITHUB_REF_TYPE" == "branch" && "$GITHUB_REF_NAME" != "publish/$TAG" ]]; then
+            echo "Publication branch $GITHUB_REF_NAME does not match publish/$TAG" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+      - name: Install package builders
+        run: sudo apt-get update && sudo apt-get install -y rpm
       - name: Check release
         run: ./scripts/check_release.sh
       - name: Build release assets
-        run: ./scripts/build_release.sh "${GITHUB_REF_NAME#v}"
+        run: ./scripts/build_release.sh "${{ steps.release.outputs.version }}"
+      - name: Create release tag from publication branch
+        if: github.ref_type == 'branch'
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Open Hardware Control $TAG"
+          git push origin "$TAG"
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
+          TAG: ${{ steps.release.outputs.tag }}
         shell: bash
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
           NOTES="docs/RELEASE_NOTES_v${VERSION}.md"
           if [[ -f "$NOTES" ]]; then
-            gh release create "$GITHUB_REF_NAME" dist/* \
-              --title "Kraken Control $GITHUB_REF_NAME" \
+            gh release create "$TAG" dist/* \
+              --title "Open Hardware Control $TAG – NZXT Kraken & Corsair on Linux" \
               --notes-file "$NOTES" \
               --verify-tag
           else
-            gh release create "$GITHUB_REF_NAME" dist/* \
-              --title "Kraken Control $GITHUB_REF_NAME" \
+            gh release create "$TAG" dist/* \
+              --title "Open Hardware Control $TAG – NZXT Kraken & Corsair on Linux" \
               --generate-notes \
               --verify-tag
           fi

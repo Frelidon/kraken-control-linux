@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Name=Kraken Control by Frelidon
-Comment=NZXT Kraken 2023 unter Linux steuern · Version 2.9.6
+Name=Open Hardware Control by Frelidon
+Comment=NZXT-Kraken-LCD, Pumpe, Lüfter und Corsair/OpenLinkHub unter Linux steuern
 Exec=@EXEC@
 Icon=@ICON@
 Terminal=false
 Categories=System;Settings;HardwareSettings;
 StartupNotify=true
-Keywords=NZXT;Kraken;AIO;Cooling;RGB;LCD;liquidctl;Frelidon;
+Keywords=Hardware;NZXT;Kraken;Corsair;OpenLinkHub;AIO;Cooling;RGB;LCD;liquidctl;Frelidon;

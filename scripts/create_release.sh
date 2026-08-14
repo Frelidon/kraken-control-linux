@@ -37,7 +37,7 @@ case "$answer" in
   *) echo "Cancelled."; exit 0 ;;
 esac
 
-git tag -a "$TAG" -m "Kraken Control $TAG"
+git tag -a "$TAG" -m "Open Hardware Control $TAG"
 git push origin "$TAG"
 
 echo "Tag pushed: $TAG"

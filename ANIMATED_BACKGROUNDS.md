@@ -1,6 +1,6 @@
-# Animierte Hintergründe – Version 2.9.6
+# Animierte Hintergründe – Version 2.9.4
 
-Kraken Control 2.9.6 enthält keine heruntergeladenen Videos, GIFs oder Stockbilder. Sämtliche Hintergründe werden zur Laufzeit mit Qt `QPainter` aus mathematischen Formen, Gradienten und Partikeln erzeugt.
+Kraken Control 2.9.4 enthält keine heruntergeladenen Videos, GIFs oder Stockbilder. Sämtliche Hintergründe werden zur Laufzeit mit Qt `QPainter` aus mathematischen Formen, Gradienten und Partikeln erzeugt.
 
 ## Vorteile
 

@@ -1,23 +1,18 @@
-# Supported devices - Version 2.9.6
+# Supported devices – Open Hardware Control 3.0.9
 
-## Tested
+## NZXT module
 
-| Device | USB ID | Support | Official manufacturer page |
+| Device | USB ID | Backend | Scope |
 |---|---|---|---|
-| NZXT Kraken RGB 360 (2023, Standard / Non-Elite; liquidctl: `NZXT Kraken 2023`) | `1e71:300e` | liquid temperature, pump, radiator fans, 240x240 LCD | [NZXT Kraken (2023) specifications](https://support.nzxt.com/hc/en-us/articles/47207322896923-Kraken-2023-Specs) |
-| NZXT 2023 RGB Controller | `1e71:2012` | separate RGB channels through liquidctl | [NZXT Kraken (2023) included fans and controllers](https://support.nzxt.com/hc/en-us/articles/47207322896923-Kraken-2023-Specs) |
+| NZXT Kraken 2023 | `1e71:300e` | liquidctl | liquid, pump, radiator fans, LCD |
+| NZXT 2023 RGB Controller | `1e71:2012` | liquidctl | three RGB channels |
 
-Additional official NZXT pages:
+The reference device remains the NZXT Kraken RGB 360 (2023, Standard / Non-Elite) with firmware 2.0.0.
 
-- [NZXT liquid coolers and CPU coolers](https://nzxt.com/collections/cpu-coolers)
-- [NZXT website](https://nzxt.com/)
+## Corsair through OpenLinkHub
 
-Tested combination: Kraken firmware `2.0.0`, liquidctl `1.16.x`, Nobara/Fedora Linux.
+Open Hardware Control displays devices reported by the locally installed OpenLinkHub service through `/api/devices/`; it does not maintain a separate fixed Corsair USB list. Validated controls added in version 3.0.4 remain available for reported cooling, RGB/LCD, mouse, keyboard and headset devices. Complex device-specific settings remain in the local dashboard.
 
-Further devices are considered supported only after hardware testing. The manufacturer links are factual product and documentation references; Kraken Control is not an official NZXT product.
+Version 3.0.9 maps reported mice to original generic GPL SVG schematics. A physical button can be edited only when OpenLinkHub reports an unambiguous button index. None, media, DPI, keyboard, sniper-DPI, mouse and existing macro assignments are supported. The recorder creates bounded keyboard/delay macros only while its dialog has focus; complex sequences remain in the OpenLinkHub dashboard.
 
-## Deliberate scope boundary
-
-Kraken Control controls only components that belong to the supported Kraken cooling system. This includes the Kraken pump and radiator fans reported or controlled through the Kraken device itself.
-
-Motherboard fan headers, additional chassis fans, GPU fans and general system controls are not supported and are neither probed nor written by this application.
+Real-hardware validation with OpenLinkHub 0.9.0 and the connected Corsair devices is still required. Firmware updates, motherboard controls, Open Radeon Control Center and untested direct Corsair USB writes are out of scope.

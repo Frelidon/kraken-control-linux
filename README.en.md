@@ -1,121 +1,77 @@
-# Kraken Control by Frelidon 2.9.6 – Linux
+# Open Hardware Control by Frelidon 3.0.9 – NZXT Kraken & Corsair on Linux
 
 <!-- project-badges -->
-[![CI](https://github.com/Frelidon/kraken-control-linux/actions/workflows/ci.yml/badge.svg)](https://github.com/Frelidon/kraken-control-linux/actions/workflows/ci.yml) [![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-blue.svg)](https://github.com/Frelidon/kraken-control-linux/blob/main/LICENSE) [![Release](https://img.shields.io/github/v/release/Frelidon/kraken-control-linux?display_name=tag)](https://github.com/Frelidon/kraken-control-linux/releases)
+[![CI](https://github.com/Frelidon/kraken-control-linux/actions/workflows/ci.yml/badge.svg)](https://github.com/Frelidon/kraken-control-linux/actions/workflows/ci.yml) [![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-blue.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/Frelidon/kraken-control-linux?display_name=tag)](https://github.com/Frelidon/kraken-control-linux/releases)
 <!-- /project-badges -->
 
-Independent open-source graphical control application for supported **NZXT Kraken (2023)** hardware on Linux.
+Open Hardware Control is a free Linux GUI for the **NZXT Kraken LCD**, pump, radiator fans and RGB, with **Corsair device integration through OpenLinkHub**. It targets Fedora, Nobara, Debian, Ubuntu, Linux Mint, Arch Linux, Manjaro, EndeavourOS and openSUSE.
 
-> **Status:** experimental open-source beta. Use at your own risk. This project is independent from NZXT and is not endorsed or supported by NZXT.
-
-Kraken Control uses [`liquidctl`](https://github.com/liquidctl/liquidctl) as its hardware backend. The application contains no telemetry, advertising, or automatic cloud service.
+![Open Hardware Control dashboard](docs/images/screenshots/01-dashboard-overview.png)
 
 <!-- project-repository -->
 Project repository: <https://github.com/Frelidon/kraken-control-linux>
 <!-- /project-repository -->
 
-## Release 2.9.6
+Version 3.0.9 turns the OpenLinkHub mouse schematic into a direct assignment editor for safely reported buttons. It also adds a deliberately window-local keyboard macro recorder. Generated LCD hardware designs remove the small LIVE/program captions, offer independent label/value colours and sizes, and support a global Celsius/Fahrenheit setting across the UI, profiles, curves and regenerated animations.
 
-2.9.6 is the real-hardware-tested build prepared for the first public GitHub release.
+Closing to the tray deliberately keeps LCD output and curve control running. A true quit stops the raw GIF streamer first, restores `lcd screen liquid`, then stores the conservative autonomous cooling fallback. Five in-project SVG families cover compact, ergonomic, symmetric, multi-button and MMO mice without vendor photos. Only buttons carrying a safe index reported by OpenLinkHub can be edited; the application never guesses one.
 
-Highlights since 2.9.4:
+Mouse assignments use OpenLinkHub's documented assignment endpoint and remain locked until writes are explicitly enabled for the session. The macro recorder captures only individual keys and delays while its visible dialog has focus; it installs no global input hook. Cooling and safety logic continue to store Celsius internally, so switching the display to Fahrenheit cannot alter the physical thresholds.
 
-- **2.9.6:** fixed the LCD clock start regression caused by the removed `clock_24h` widget; a regression test now guards this path.
-- **2.9.5:** all pump and radiator-fan writes use the confirmed `liquidctl --direct-access` path.
-- **2.9.5:** background permission failures no longer create repeated modal repair dialogs.
-- **2.9.5:** the visible action log is capped at **10,000 characters**, removing the oldest complete lines first.
-- **2.9.5:** more detailed logging for CPU detection/profiles, LCD clock, theme, and display changes.
-- **2.9.4:** animated backgrounds can be re-enabled after being disabled and keep the last selected theme.
-- **2.9.3:** stabilized light-theme/background rendering.
-- **2.9.2:** settings are scrollable and the window adapts better to different screen sizes.
+Since 3.0.6, the active LCD mode is stored explicitly in full and LCD profiles. Legacy 3.0.5 profiles containing a GIF are migrated to GIF mode. A saved maximized window state can no longer reopen the hidden autostart window, while manual launches continue to open normally. Orderly desktop-session termination also clears the experimental crash marker before USB cleanup.
 
-Full history: [`CHANGELOG.md`](CHANGELOG.md) and [`FEATURES_BY_VERSION.md`](FEATURES_BY_VERSION.md).
+Both NZXT curves are now evaluated continuously from Linux hwmon. The controller interpolates between points, smooths short Ryzen temperature spikes, adds hysteresis and rate limits writes. It keeps reading the CPU during LCD GIF streaming and uses the coordinated USB handoff only for relevant duty changes. Existing liquid curves are migrated to safe CPU curves, all AM5 profiles provide updated CPU points, repeated sensor failure applies a 75% fallback, and a clean application exit stores conservative autonomous liquid curves in the Kraken.
 
-## Main features
+CPU curves require the application to keep running. Closing to the system tray preserves control; a real exit installs the safe hardware fallback.
 
-- Kraken coolant, pump and radiator-fan monitoring
-- fixed pump/fan output and graphical curves
-- AMD AM5 CPU profiles and optional CPU assistance
-- tray/background operation
-- LCD images and experimental LCD clock
-- NZXT 2023 RGB Controller support
-- light, dark and system themes with custom accent color
-- procedural animated backgrounds
-- categorized full/cooling/LCD/RGB/design profiles
-- monitor/DPI-aware app scaling without changing the Linux display resolution
-- keyboard paths and accessibility labels
-- dependency checks and controlled Fedora/Nobara installation
-- udev repair through `pkexec`
-- local redacted diagnostics
+OpenLinkHub controls include reported cooling profiles and manual channel values, RGB profiles, brightness, labels, LCD rotation, mouse DPI/polling/sleep options, keyboard profile/layout/device values and headset ANC/sidetone options. Writes remain locked until explicitly enabled for the current application session.
 
-## Installation on Nobara/Fedora
+Pump, radiator-fan, quick-profile and calculated CPU-curve writes use a short ownership handoff: the streamer finishes a frame and releases USB, the GUI sends the cooling transaction exclusively, and the same cached stream reconnects and continues automatically. Kraken status polling remains paused, while CPU sensing and CPU-curve evaluation continue through Linux hwmon.
 
-Optional dependency installation:
+## Highlights
+
+- hierarchical left sidebar
+- automatic device discovery and hardware-filtered modules
+- optional display of undetected modules
+- migration of existing Kraken Control settings
+- OpenLinkHub installation, service-context and local-API detection
+- Corsair device and telemetry view plus allow-listed documented write actions
+- user-scoped OpenLinkHub start, stop and restart actions
+- direct access to the local OpenLinkHub dashboard
+- warnings for system context or two active services
+
+## Installation
+
+Fedora/Nobara RPM:
 
 ```bash
-sudo dnf install liquidctl python3-pyside6 python3-pillow polkit
+cd ~/Downloads
+sudo dnf install ./open-hardware-control-3.0.9-1.noarch.rpm
 ```
 
-From the extracted release directory:
+Debian/Ubuntu/Linux Mint DEB:
 
 ```bash
+cd ~/Downloads
+sudo apt install ./open-hardware-control_3.0.9_all.deb
+```
+
+Universal ZIP for the supported distro families:
+
+```bash
+cd ~/Downloads
+unzip open_hardware_control_v3_0_9.zip
+cd open-hardware-control-3.0.9
 chmod +x install.sh
 ./install.sh
 ```
 
-Start:
+The existing installation is updated in place and **Open Hardware Control by Frelidon** then appears in the application menu. See [INSTALL.md](INSTALL.md) for all distro-specific dependency commands.
 
-```bash
-~/.local/bin/kraken-control
-```
+The compatibility command `kraken-control` also launches the new application. OpenLinkHub is installed separately and is not bundled or modified by Open Hardware Control.
 
-Kraken Control itself is not run as root.
+The OpenLinkHub adapter only accepts loopback URLs, exposes no full serial numbers in the UI or logs, validates every payload and never changes the system-wide service automatically. Complex macro editing, the full RGB editor and media operations remain in OpenLinkHub's local web dashboard.
 
-## Security and privacy
+See `Open_Hardware_Control_Projekt.md`, `OPENLINKHUB_INTEGRATION.md`, `SECURITY.md` and `SUPPORTED_DEVICES.md`. The complete NZXT module history remains in `Kraken_Control_Projekt.md` and `USB_CAPTURE_FINDINGS.md`.
 
-Kraken Control is an experimental hardware-control application. Low fixed cooling values require confirmation, background write failures are rate-limited, and diagnostics/logs should still be manually reviewed before public sharing.
-
-See [`SECURITY.md`](SECURITY.md) and [`PRIVACY.md`](PRIVACY.md).
-
-## Development
-
-Run local checks with:
-
-```bash
-./scripts/check_release.sh
-```
-
-GitHub Actions runs static and stub runtime tests; CI does not perform real hardware writes.
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
-## License and independence
-
-Licensed under **GPL-3.0-or-later**. See [`LICENSE`](LICENSE).
-
-Project lead and publisher: **Frelidon**. ChatGPT by OpenAI was used as a development assistant for coding, debugging, documentation, and test preparation; it is not a runtime component. See [`AI_ASSISTANCE.md`](AI_ASSISTANCE.md).
-
-All product names and trademarks belong to their respective owners. Kraken Control is not official NZXT software.
-
-## Documentation
-
-- [`CHANGELOG.md`](CHANGELOG.md)
-- [`FEATURES_BY_VERSION.md`](FEATURES_BY_VERSION.md)
-- [`COMPONENT_VERSIONS.md`](COMPONENT_VERSIONS.md)
-- [`CPU_PROFILES.en.md`](CPU_PROFILES.en.md)
-- [`PROFILES.md`](PROFILES.md)
-- [`ANIMATED_BACKGROUNDS.md`](ANIMATED_BACKGROUNDS.md)
-- [`PROJECT_SCOPE.en.md`](PROJECT_SCOPE.en.md)
-- [`SOFTWARE_AND_LINKS.en.md`](SOFTWARE_AND_LINKS.en.md)
-- [`SOURCE_CODE.md`](SOURCE_CODE.md)
-- [`ROADMAP.md`](ROADMAP.md)
-- [`SUPPORTED_DEVICES.en.md`](SUPPORTED_DEVICES.en.md)
-
-## Supported devices
-
-| Device | USB ID | Tested scope |
-|---|---|---|
-| NZXT Kraken RGB 360 (2023, Standard / Non-Elite; liquidctl: `NZXT Kraken 2023`) | `1e71:300e` | Coolant temperature, pump, Kraken-managed radiator fans, 240×240 LCD |
-| NZXT 2023 RGB Controller | `1e71:2012` | Three ARGB channels through liquidctl |
-
-Official Kraken specifications: <https://support.nzxt.com/hc/en-us/articles/47207322896923-Kraken-2023-Specs>
+Public experimental beta, provided without warranty. Independent project, not officially affiliated with NZXT, Corsair or OpenLinkHub. GPL-3.0-or-later.

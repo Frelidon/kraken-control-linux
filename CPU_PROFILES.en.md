@@ -1,15 +1,16 @@
-# AMD AM5 processor profiles in Kraken Control 2.9.6
+# AMD AM5 processor profiles in Open Hardware Control 3.0.9
 
-The profiles control only the supported NZXT Kraken cooling hardware. CPU Tjmax and Kraken coolant temperature are separate quantities.
+The profiles only control the supported NZXT Kraken cooling hardware. Pump and radiator-fan curves now use CPU temperature directly. CPU Tjmax and Kraken liquid temperature remain separate quantities.
 
-## Regeln
+## Rules
 
-- Ryzen 9000, Ryzen 8000G und die aufgenommenen normalen Ryzen-7000-Modelle: AMD-Tjmax 95 °C, verstärkte Kraken-Kühlung ab 80 °C, 100 % ab 90 °C.
-- Ryzen 7000 X3D: AMD-Tjmax 89 °C, verstärkte Kraken-Kühlung ab 75 °C, 100 % ab 85 °C.
-- Kraken-Flüssigkeit: Warnung standardmäßig 42 °C, kritisch 50 °C; Wasserkurven erreichen spätestens bei 45 °C 100 %.
-- Die CPU-Assistenz verwendet 5 °C Hysterese und stellt anschließend die gewählten Wasserkurven wieder her.
+- Ryzen 9000, Ryzen 8000G and listed standard Ryzen 7000 models: AMD Tjmax 95 °C, stronger cooling from 80 °C, both CPU curves at 100% by 90 °C.
+- Ryzen 7000 X3D: AMD Tjmax 89 °C, stronger cooling from 75 °C, both CPU curves at 100% by 85 °C.
+- The controller interpolates linearly between five CPU points. An EMA smooths brief spikes; rising demand reacts faster than falling demand.
+- Kraken liquid: warning at 42 °C, critical at 50 °C, optional automatic 100% at the critical threshold.
+- A clean application exit stores conservative liquid-temperature curves as an autonomous hardware fallback.
 
-## Enthaltene Einzelprofile
+## Included profiles
 
 - Ryzen 9000 X3D: 9950X3D2, 9950X3D, 9900X3D, 9850X3D, 9800X3D
 - Ryzen 9000: 9950X, 9900X, 9700X, 9600X, 9600
@@ -17,9 +18,9 @@ The profiles control only the supported NZXT Kraken cooling hardware. CPU Tjmax 
 - Ryzen 7000 X3D: 7950X3D, 7900X3D, 7800X3D, 7700X3D, 7600X3D
 - Ryzen 7000: 7950X, 7900X, 7700X, 7600
 
-## Primärquellen
+## Primary sources
 
-- AMD Prozessorspezifikationen: https://www.amd.com/en/products/specifications/processors.html
+- AMD processor specifications: https://www.amd.com/en/products/specifications/processors.html
 - Linux k10temp: https://docs.kernel.org/hwmon/k10temp.html
 
-Jedes Profil enthält zusätzlich die konkrete offizielle AMD-Produktseite im Quellcode. Profile sind konservative Anwendungsvorgaben und keine Garantie für jede Gehäuse-, Raum- oder Lastsituation.
+Each profile also contains the corresponding official AMD product page in source code. Profiles are conservative application defaults, not a guarantee for every case, ambient temperature or workload.
